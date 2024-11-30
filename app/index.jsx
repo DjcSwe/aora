@@ -7,7 +7,7 @@ export default function App() {
     return (
         <View>
             <Text className="text-3xl font-pblack">Index.jsx</Text>
-            <Link href="./profile" style={{color:'blue'}}>Go to Profile</Link>
+            <Link href="./home" style={{color:'blue'}}>Go to Home</Link>
             <StatusBar style="auto" />
         </View>
     );
