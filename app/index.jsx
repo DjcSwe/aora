@@ -6,7 +6,7 @@ import "../global.css";
 export default function App() {
     return (
         <View>
-            <Text className="text-3xl">Index.jsx</Text>
+            <Text className="text-3xl font-pblack">Index.jsx</Text>
             <Link href="./profile" style={{color:'blue'}}>Go to Profile</Link>
             <StatusBar style="auto" />
         </View>
