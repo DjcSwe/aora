@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import { React, useState }  from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from "../../constants"
@@ -16,10 +16,11 @@ const SignUp = () => {
   const [isSubmitting, setisSubmitting] = useState(false)
   const submit = () => {
     // Validate inputs
-    if (!form.username) 
-    createUser();
+    if (!form.username) Alert.alert('Please enter a valid username');
+    else if (!form.email) Alert.alert("Please enter a valid email");
+    else if (!form.password) Alert.alert("Please enter a valid password");
+    else createUser();
   }
-
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
@@ -29,21 +30,21 @@ const SignUp = () => {
           <FormField 
             title="Username"
             value={form.username}
-            handleChangeText={(e) => setForm({...form, email: e})}
+            handleChangeText={(input) => setForm({...form, username: input})}
             otherStyles="mt-10"
             keyboardType="email-address"
           />
           <FormField 
             title="Email"
             value={form.email}
-            handleChangeText={(e) => setForm({...form, email: e})}
+            handleChangeText={(input) => setForm({...form, email: input})}
             otherStyles="mt-7"
             keyboardType="email-address"
           />
           <FormField 
             title="Password"
             value={form.password}
-            handleChangeText={(e) => setForm({...form, password: e})}
+            handleChangeText={(input) => setForm({...form, password: input})}
             otherStyles="mt-7"
           />
           <CustomButton 
