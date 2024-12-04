@@ -5,6 +5,7 @@ import { images } from "../../constants"
 import FormField from '../../components/FormField'
 import CustomButton from "../../components/CustomButton"
 import { Link } from 'expo-router'
+import { createUser } from '../../lib/appwrite'
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -14,7 +15,9 @@ const SignUp = () => {
   })
   const [isSubmitting, setisSubmitting] = useState(false)
   const submit = () => {
-    
+    // Validate inputs
+    if (!form.username) 
+    createUser();
   }
 
   return (
@@ -44,14 +47,14 @@ const SignUp = () => {
             otherStyles="mt-7"
           />
           <CustomButton 
-            title="Sign In"
+            title="Create New Account"
             handlePress={submit}
             containerStyles="mt-7"
             isLoading={isSubmitting}
           />
           <View className="justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">Have an account already?</Text>
-            <Link href="/sign-in" className='text-lg text-secondary font-semibold'>Sign in</Link>
+            <Link href="../" className='text-lg text-secondary font-semibold'>Sign in</Link>
           </View>
         </View>
       </ScrollView>

@@ -17,9 +17,11 @@
     "nativewind": "^4.1.23",
     "react": "18.3.1",
     "react-native": "0.76.3",
+    "react-native-appwrite": "^0.5.0",
     "react-native-reanimated": "^3.16.3",
     "react-native-safe-area-context": "^4.14.0",
-    "react-native-screens": "~4.1.0"
+    "react-native-screens": "~4.1.0",
+    "react-native-url-polyfill": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
