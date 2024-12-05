@@ -5,38 +5,41 @@ import { images } from "../../constants"
 import FormField from '../../components/FormField'
 import CustomButton from "../../components/CustomButton"
 import { Link, router } from 'expo-router'
-import { signIn } from '../../lib/appwrite'
+import { checkActiveSession, deleteSessions, signIn } from '../../lib/appwrite'
 
 const SignIn = () => {
+
    const [form, setForm] = useState({
       email: "",
       password: "",
    })
-   const [isSubmitting, setisSubmitting] = useState(false)
-   const submit = async () => {
-      // Validate inputs
-      if (!form.email || !validateEmail(form.email))
-         Alert.alert("Error", "Please enter a valid email.");
-      else if (!form.password)
-         Alert.alert("Error", "Please enter a valid password.");
-      else { // inputs valid, create new user
-         setisSubmitting(true);
-         try {
-            await signIn(form.email, form.password); 
-            // TODO: set form data to global state
-            router.replace("/home");
-         } catch (error) {
-            console.log("sign-up.jsx", error);
-            setisSubmitting(false);
-            Alert.alert("Error", error.message);
-         }
-      }
-   };
 
-   function validateEmail(email) {
-      const regexp =
-         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regexp.test(email);
+   const [isSubmitting, setisSubmitting] = useState(false)
+
+   // const submit = async () => {
+   //    validateInput()
+   //    if (validateInput()) {
+   //       setisSubmitting(true);
+   //       // Loading indicator
+   //       if (checkActiveSession()) await deleteSessions()
+   //       await signIn(form.email, form.password); 
+   //       // TODO: set form data to global state
+   //       router.replace("/home");
+   //    }
+   // };
+
+   const logIn = async () => {
+      if (checkActiveSession()) 
+         await deleteSessions()
+      await signIn(form.email, form.password); 
+      router.replace("/home");
+   }
+
+   function validateInput() {
+      const emailRegex =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!emailRegex.test(form.email)) Alert.alert("Error", "Please enter a valid email.");
+      else if (!form.password) Alert.alert("Error", "Please enter a valid password.");
+      else logIn()
    }
 
    return (
@@ -60,7 +63,7 @@ const SignIn = () => {
                />
                <CustomButton
                   title="Sign In"
-                  handlePress={submit}
+                  handlePress={validateInput}
                   containerStyles="mt-7"
                   isLoading={isSubmitting}
                />
