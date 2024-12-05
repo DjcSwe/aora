@@ -1,10 +1,11 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import { React, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from "../../constants"
 import FormField from '../../components/FormField'
 import CustomButton from "../../components/CustomButton"
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
+import { signIn } from '../../lib/appwrite'
 
 const SignIn = () => {
    const [form, setForm] = useState({
@@ -12,8 +13,30 @@ const SignIn = () => {
       password: "",
    })
    const [isSubmitting, setisSubmitting] = useState(false)
-   const submit = () => {
+   const submit = async () => {
+      // Validate inputs
+      if (!form.email || !validateEmail(form.email))
+         Alert.alert("Error", "Please enter a valid email.");
+      else if (!form.password)
+         Alert.alert("Error", "Please enter a valid password.");
+      else { // inputs valid, create new user
+         setisSubmitting(true);
+         try {
+            await signIn(form.email, form.password); 
+            // TODO: set form data to global state
+            router.replace("/home");
+         } catch (error) {
+            console.log("sign-up.jsx", error);
+            setisSubmitting(false);
+            Alert.alert("Error", error.message);
+         }
+      }
+   };
 
+   function validateEmail(email) {
+      const regexp =
+         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regexp.test(email);
    }
 
    return (
