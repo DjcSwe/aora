@@ -6,6 +6,7 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import { createUser } from "../../lib/appwrite";
+import { BlurView } from 'expo-blur';
 
 const SignUp = () => {
    const [form, setForm] = useState({
@@ -46,8 +47,7 @@ const SignUp = () => {
    return (
       <SafeAreaView className="bg-primary h-full">
          <View
-            className={`${isSubmitting ? "opacity-20" : ""
-               } w-full justify-center min-h-[72vh] px-4 my-6`}
+            className={`${isSubmitting ? "opacity-20" : null} w-full justify-center min-h-[72vh] px-4 my-6`}
             pointerEvents={`${isSubmitting ? "none" : null}`}
          >
             <Image
