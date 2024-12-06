@@ -7,43 +7,41 @@ import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import { createUser } from "../../lib/appwrite";
 import { BlurView } from 'expo-blur';
+import { useGlobalContext } from "../../context/GlobalProvider";
+
 
 const SignUp = () => {
+   const { setUser, setisLoggedIn } = useGlobalContext();
+   const [isSubmitting, setisSubmitting] = useState(false);
    const [form, setForm] = useState({
       username: "",
       email: "",
       password: "",
    });
-   const [isSubmitting, setisSubmitting] = useState(false);
-   const submit = async () => {
-      // Validate inputs
-      if (!form.username)
-         Alert.alert("Error", "Please enter a valid username.");
-      else if (!form.email || !validateEmail(form.email))
-         Alert.alert("Error", "Please enter a valid email.");
-      else if (!form.password)
-         Alert.alert("Error", "Please enter a valid password.");
-      else { // inputs valid, create new user
-         setisSubmitting(true);
-         try {
-            const result = await createUser(
-               form.email,
-               form.password,
-               form.username
-            ); // TODO: set form data to global state
-            router.replace("/home");
-         } catch (error) {
-            console.log("sign-up.jsx", error);
-            setisSubmitting(false);
-            Alert.alert("Error", error.message);
-         }
+
+   const submit = async() => {
+      setisSubmitting(true);
+      try {
+         const result = await createUser(form.email, form.password, form.username);
+         setUser(result)
+         setisLoggedIn(true);
+         router.replace("/home");
+      } catch (error) {
+         console.log("sign-up.jsx", error);
+         Alert.alert("Error", error.message);
+      } finally {
+         setisSubmitting(false);
       }
    };
-   function validateEmail(email) {
-      const regexp =
-         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regexp.test(email);
+
+   function validateInput() {
+      const emailRegex =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!emailRegex.test(form.email)) Alert.alert("Error", "Please enter a valid email.");
+      else if (!form.username) Alert.alert("Error", "Please enter a valid username.");
+      else if (!form.password) Alert.alert("Error", "Please enter a valid password.");
+      else submit()
    }
+
    return (
       <SafeAreaView className="bg-primary h-full">
          <View
@@ -56,7 +54,7 @@ const SignUp = () => {
                className="w-[115px] h-[35px]"
             />
             <Text className="text-2xl text-white mt-10 font-psemibold">
-               Sign up for a new account.
+               Create your new account here.
             </Text>
             <FormField
                title="Username"
@@ -80,7 +78,7 @@ const SignUp = () => {
             />
             <CustomButton
                title="Create New Account"
-               handlePress={submit}
+               handlePress={validateInput}
                containerStyles="mt-7"
                isLoading={isSubmitting}
             />

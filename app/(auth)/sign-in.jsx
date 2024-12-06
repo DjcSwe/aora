@@ -5,10 +5,11 @@ import { images } from "../../constants"
 import FormField from '../../components/FormField'
 import CustomButton from "../../components/CustomButton"
 import { Link, router } from 'expo-router'
-import { checkActiveSession, deleteSessions, signIn } from '../../lib/appwrite'
+import { checkActiveSession, deleteSessions, signIn, getCurrentUser } from '../../lib/appwrite'
+import { useGlobalContext } from '../../context/GlobalProvider'
 
 const SignIn = () => {
-
+   const { setUser, setisLoggedIn } = useGlobalContext();
    const [isSubmitting, setisSubmitting] = useState(false)
    const [form, setForm] = useState({
       email: "",
@@ -27,13 +28,18 @@ const SignIn = () => {
       try {
          if (await checkActiveSession()) await deleteSessions();
          await signIn(form.email, form.password);
+         const result = await getCurrentUser();
+         setUser(result);
+         setisLoggedIn(true);
          router.replace("/home");
       } catch (error) {
-         setisSubmitting(false);
          // TODO: get unique error messages
          Alert.alert("Error", "There was an issue singning in. Please try again.");
          console.log("logIn: ", error);
+         setisSubmitting(false);
          throw error;
+      } finally {
+         setisSubmitting(false);
       }
    }
 
