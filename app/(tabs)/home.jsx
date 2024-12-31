@@ -22,7 +22,7 @@ const Home = () => {
       setRefreshing(false);
    }
    return (
-      <SafeAreaView className="bg-primary h-full">
+      <SafeAreaView className="bg-primary h-full" edges={['top', 'left', 'right']}>
          <FlatList
             //data={[{id: 1}, {id: 2}, {id: 3}]}
             data={posts}
