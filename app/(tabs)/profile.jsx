@@ -2,6 +2,7 @@ import { Button, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { checkActiveSession, deleteSessions, signIn } from '../../lib/appwrite'
 import { router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Profile = () => {
 
@@ -16,10 +17,10 @@ const Profile = () => {
    }
 
    return (
-      <View>
+      <SafeAreaView>
          <Text>Profile</Text>
          <Button title='Log Out' onPress={logOut}/>
-      </View>
+      </SafeAreaView>
    )
 }
 
