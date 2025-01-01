@@ -34,3 +34,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/.gitignore
+/.idea/aora.iml
+/.idea/material_theme_project_new.xml
+/.idea/modules.xml
+/.idea/vcs.xml
