@@ -4,9 +4,9 @@ import { icons } from "../constants";
 import { useFocusEffect } from '@react-navigation/native';
 import { router, usePathname } from "expo-router";
 
-const SearchInput = () => {
+const SearchInput = ({ initialQuery }) => {
    const pathName = usePathname();
-   const [query, setQuery] = useState("");
+   const [query, setQuery] = useState(initialQuery || '');
 
    return (
       <View
