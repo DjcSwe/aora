@@ -1,51 +1,54 @@
-import {View, Text, FlatList, TouchableOpacity, ImageBackground, Image} from 'react-native'
+import {View, Text, FlatList, TouchableOpacity, ImageBackground, Image, Button} from 'react-native'
 import React from 'react'
 import {useState} from 'react'
 import * as Animatable from 'react-native-animatable'
 import {icons} from "../constants";
 import {Video, ResizeMode} from "expo-av";
+import {useVideoPlayer, VideoView} from "expo-video";
+import {useEvent} from "expo";
 
 const zoomIn = {
-   0: { scale: 0.9 },
-   1: { scale: 1 },
+   0: {scale: 0.9},
+   1: {scale: 1},
 }
 
 const zoomOut = {
-   0: { scale: 1 },
-   1: { scale: 0.9 },
+   0: {scale: 1},
+   1: {scale: 0.9},
 }
 
 const TrendingItem = ({activeItem, item}) => {
    const [play, setPlay] = useState(false);
-   console.log(
-      JSON.stringify(`activeItem.$id ${activeItem}`, null, '\t'),
-      JSON.stringify(`item.$id ${item.$id}`, null, '\t'))
+   //console.log(JSON.stringify(`activeItem.$id ${activeItem}`, null, '\t'), JSON.stringify(`item.$id ${item.$id}`, null, '\t'))
+
    return (
       <Animatable.View
          className="mr-5"
          animation={activeItem === item.$id ? zoomIn : zoomOut}
          duration={500}
       >
-         {play ?
-            (
+         { play
+            ? (
                <View className="w-52 h-72 rounded-[35px] border-amber-950 border-2">
                   <Text className="text-white">Playing: {item.$id}</Text>
-                  // TODO: Fix video playback
+                  <Text className="text-white">Video is here:</Text>
+                  // TODO: Video Player Here...
                   <Video
-                     source={{uri: "https://player.vimeo.com/video/949582778?h=d60220d68d"}}
-                     className="w-52 h-72 rounded-[33px] mt-3 bg-white/10"
+                     source={{
+                        uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                     }}
+                     style={{width:'100%', height:'100%'}}
                      resizeMode={ResizeMode.CONTAIN}
                      useNativeControls
-                     shouldPlay={true}
+                     shouldPlay
                      onPlaybackStatusUpdate={(status) => {
                         if (status.didJustFinish) {
                            setPlay(false)
                         }
                      }}
                   />
-               </View>
-            ) :
-            (
+               </View>)
+            : (
                <TouchableOpacity
                   className="relative justify-center items-center"
                   activeOpacity={0.7}
@@ -62,11 +65,9 @@ const TrendingItem = ({activeItem, item}) => {
                      className="w-16 h-16 absolute"
                      resizeMode="contain"
                   />
-               </TouchableOpacity>
-            )
+            </TouchableOpacity>)
          }
-      </Animatable.View>
-   )
+      </Animatable.View>)
 }
 
 const Trending = ({posts}) => {
@@ -81,14 +82,12 @@ const Trending = ({posts}) => {
          data={posts}
          horizontal
          keyExtractor={(item) => item.$id}
-         renderItem={({item}) => (
-            <TrendingItem activeItem={activeItem} item={item}/>
-         )}
+         renderItem={({item}) => (<TrendingItem activeItem={activeItem} item={item}/>)}
          onViewableItemsChanged={viewableItemChanged}
          viewabilityConfig={{itemVisiblePercentThreshold: 70}}
          contentOffset={{x: 170}}
-      />
-   )
+      />)
 }
 
 export default Trending
+
