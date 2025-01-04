@@ -8,8 +8,8 @@ const Bookmark = () => {
 
    // Video Player
 
-   const videoSource = 'https://youtu.be/KpRVAR_emBY?si=rt9VPmcMhYEwNa4k';
-   //const videoSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+   //const videoSource = 'https://youtu.be/KpRVAR_emBY?si=rt9VPmcMhYEwNa4k';
+   const videoSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
    const player = useVideoPlayer(videoSource, player => {
       player.loop = true;
       player.play();
