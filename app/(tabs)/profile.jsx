@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {router} from 'expo-router';
-import {Button, FlatList, TouchableOpacity, View, Image} from 'react-native'
+import {FlatList, TouchableOpacity, View, Image, ActivityIndicator, Text, Alert} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {deleteSessions, getUserPosts} from '../../lib/appwrite'
 import useAppWrite from "../../lib/useAppwrite";
@@ -11,18 +11,24 @@ import {icons} from "../../constants";
 import InfoBox from "../../components/InfoBox";
 
 const Profile = () => {
-   const { user, setUser, setIsLoggedIn } = useGlobalContext();
+   const { user, setUser, setisLoggedIn } = useGlobalContext();
    const { data: posts } = useAppWrite(() => getUserPosts(user.$id));
-   console.log("Posts: "+ posts);
-   console.log("user.$id: " + user.$id);
+   const [isSubmitting, setIsSubmitting] = useState(false)
 
-   function logOut() {
+   async function logOut() {
+      setIsSubmitting(true)
       try {
-         deleteSessions().then(r => {console.log(r)});
+         await deleteSessions()
+         setUser(null)
+         setisLoggedIn(false)
          router.replace("/sign-in")
       } catch (error) {
+         Alert.alert("Sign Out Error", error.message);
          console.log("logout: ", error)
+         setIsSubmitting(false);
          throw error
+      } finally {
+         setIsSubmitting(false)
       }
    }
 
@@ -77,6 +83,14 @@ const Profile = () => {
                <EmptyState title="No Videos Found"/>
             )}
          />
+         {isSubmitting ? (
+            <View>
+               <ActivityIndicator size="large" />
+               <Text className="text-center text-lg text-gray-100 font-pregular mt-4">
+                  Signing out...
+               </Text>
+            </View>
+         ) : null}
       </SafeAreaView>
    )
 }
