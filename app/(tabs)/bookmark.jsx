@@ -18,7 +18,12 @@ const Bookmark = () => {
    return (
       <SafeAreaView>
          <View className="items-center bg-primary">
-            <VideoView style={{width:350, height:275}} player={player} allowsFullscreen allowsPictureInPicture />
+            <VideoView
+               style={{width:350, height:275}}
+               player={player}
+               allowsFullscreen
+               allowsPictureInPicture
+            />
             <View>
                <Button
                   title={isPlaying ? 'Pause' : 'Play'}
