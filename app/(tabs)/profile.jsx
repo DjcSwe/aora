@@ -13,10 +13,10 @@ import InfoBox from "../../components/InfoBox";
 const Profile = () => {
    const { user, setUser, setisLoggedIn } = useGlobalContext();
    const { data: posts } = useAppWrite(() => getUserPosts(user.$id));
-   const [isSubmitting, setIsSubmitting] = useState(false)
+   const [spinner, setSpinner] = useState(false)
 
    async function logOut() {
-      setIsSubmitting(true)
+      setSpinner(true)
       try {
          await deleteSessions()
          setUser(null)
@@ -25,10 +25,8 @@ const Profile = () => {
       } catch (error) {
          Alert.alert("Sign Out Error", error.message);
          console.log("logout: ", error)
-         setIsSubmitting(false);
+         setSpinner(false);
          throw error
-      } finally {
-         setIsSubmitting(false)
       }
    }
 
@@ -83,7 +81,7 @@ const Profile = () => {
                <EmptyState title="No Videos Found"/>
             )}
          />
-         {isSubmitting ? (
+         {spinner ? (
             <View>
                <ActivityIndicator size="large" />
                <Text className="text-center text-lg text-gray-100 font-pregular mt-4">
